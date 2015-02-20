@@ -1,0 +1,65 @@
+[MiniMe]
+    #Requirement section
+    required       = 0
+    maximum        = 0
+
+    #Restrict section
+    restrictmap    = ""
+    restrictteam   = 0
+    restrictitem   = ""
+    teamlimit      = 0
+
+    #Other info
+    author         = "Strikke & Tinus/Mini"
+    desc           = "Build race with high damage"
+    spawncmd       = "es playerset model event_var(userid) humans\group03m\female_01;es_tell event_var(userid) You are barrel now!?"
+    deathcmd       = "es_tell event_var(userid) YOU SUCK!"
+    roundstartcmd  = ""
+    roundendcmd    = ""
+    preloadcmd     = ""
+    allowonly      = ""
+    onchange       = ""
+
+    #Skill information
+    numberofskills = 6
+    numberoflevels = 4
+    skillnames     = "Moon Jump|Long Jump|Freeze|Burn|EnemyTP|Build"
+    skilldescr     = "Makes you jump higher|Makes your jumps loger|Freeze your enemy to the ground|Burn your enemy like your favorite bacon|Teleport to the person shooting at you|Makes so you can build small blocks (make a castle)"
+    skillcfg       = "player_spawn|player_spawn|player_attacker|player_attacker|player_attacker|player_ultimate"
+    skillneeded    = "0|0|0|0|0|8"
+
+    racecategory   = ""
+
+    #Skill specific information
+    [[skill1]]
+        setting = "es_xset wcs_gravity 0.99|es_xset wcs_gravity 0.91|es_xset wcs_gravity 0.85|es_xset wcs_gravity 0.78"
+        cmd     = "es_delayed 2 wcs_setfx gravity event_var(userid) = server_var(wcs_gravity) 0;es wcs_xtell event_var(userid) r_levitation"
+        sfx     = ""
+
+    [[skill2]]
+        setting = "es_xset wcs_multiplier 1.05|es_xset wcs_multiplier 1.1|es_xset wcs_multiplier 1.2|es_xset wcs_multiplier 1.4"
+        cmd     = "es wcs_setfx longjump event_var(userid) = server_var(wcs_multiplier);es_tell event_var(userid) #multi #greenLong Jump #lightgreenis successfully activated!"
+        sfx     = ""
+
+    [[skill3]]
+        setting         = "es_xset wcs_chance 3|es_xset wcs_chance 6|es_xset wcs_chance 9|es_xset wcs_chance 15"
+        racealias_pm101 = "es wcs_setfx freeze event_var(userid) = 1 1;es_centertell event_var(userid) Frozen by event_var(es_attackername);es_centertell event_var(attacker) Froze event_var(es_username)"
+        cmd             = "if (server_var(wcs_dice) <= server_var(wcs_chance)) then es_xif (event_var(es_userdead) = 0) then wcs_xalias racealias_pm101"
+        sfx             = ""
+
+    [[skill4]]
+        setting       = "es_xset wcs_chance 3;es_xset wcs_time 1|es_xset wcs_chance 6;es_xset wcs_time 1.5|es_xset wcs_chance 9;es_xset wcs_time 2|es_xset wcs_chance 15;es_xset wcs_time 2.5"
+        racealias_bm4 = "es wcs_setfx burn event_var(userid) = 1 server_var(wcs_time);es wcs damage event_var(userid) event_var(attacker) server_var(wcs_damage);es wcs_xtell event_var(userid) r_flame attacker event_var(es_attackername) victim event_var(es_username);es wcs_xtell event_var(attacker) r_flame attacker event_var(es_attackername) victim event_var(es_username)"
+        cmd           = "if (server_var(wcs_dice) <= server_var(wcs_chance)) then wcs_xalias racealias_bm4"
+        sfx           = ""
+
+    [[skill5]]
+        setting = "es_xset wcs_chance 3|es_xset wcs_chance 6|es_xset wcs_chance 9|es_xset wcs_chance 15"
+        cmd     = "if (server_var(wcs_dice) <= server_var(wcs_chance)) then es_getplayerlocation wcs_x1 wcs_y1 wcs_z1 event_var(attacker);if (server_var(wcs_dice) <= server_var(wcs_chance)) then es_setpos event_var(userid) server_var(wcs_x1) server_var(wcs_y1) server_var(wcs_z1);if (server_var(wcs_dice) <= 10) then es_tell event_var(userid) : Teleport Attack ."
+        sfx     = "if (server_var(wcs_dice) <= server_var(wcs_chance)) then es_getplayerlocation wcs_x1 wcs_y1 wcs_z1 event_var(attacker);if (server_var(wcs_dice) <= server_var(wcs_chance)) then es_getplayerlocation wcs_x2 wcs_y2 wcs_z2 event_var(userid);es_math wcs_z1 + 20;es_math wcs_z2 + 20;if (server_var(wcs_dice) <= server_var(wcs_chance)) then est_Effect 3 #a 0 sprites/tp_beam001.vmt server_var(wcs_x1) server_var(wcs_y1) server_var(wcs_z1) server_var(wcs_x2) server_var(wcs_y2) server_var(wcs_z2) 1 2 5 255 151 67 255"
+
+    [[skill6]]
+        setting  = "es_xset wcs_chance 97|es_xset wcs_chance 98|es_xset wcs_chance 99|es_xset wcs_chance 100"
+        cmd      = "if (server_var(wcs_dice) <= server_var(wcs_chance)) then es_prop_dynamic_create server_var(wcs_userid) props/de_nuke/cinderblock_stack;es_tell server_var(wcs_userid) Builded!"
+        sfx      = ""
+        cooldown = "2"
